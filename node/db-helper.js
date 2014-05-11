@@ -30,12 +30,12 @@ exports.openDb = function(successCb, errorCb) {
 
     connection.connect();
 
-    connection.query('CREATE DATABASE IF NOT EXISTS minimobiledevicelab', function (err) {
+    connection.query('CREATE DATABASE IF NOT EXISTS ' + config.dbName, function (err) {
         if (err) {
             throw err;
         }
 
-        connection.query('USE minimobiledevicelab', function (err) {
+        connection.query('USE ' + config.dbName, function (err) {
             if (err) {
                 throw err;
             }
