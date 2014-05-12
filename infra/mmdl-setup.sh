@@ -49,7 +49,7 @@ if (!payload.ref || !payload.ref.match(/^refs\/heads\/master$/i)) {
 
 proc.execFile('sudo', ['-u', 'apps', '/apps/bin/update.sh'], {}, function(err, stdout, stderr) {
     var resp = 'Status: ' + (err ? 500 : 200) + '\nContent-Type: text/plain\n\n';
-    resp += '\n>>> STDOUT:\n' stdout + '\n\n>>> STDERR:\n' + stderr;
+    resp += '\n>>> STDOUT:\n' + stdout + '\n\n>>> STDERR:\n' + stderr;
     process.stdout.write(resp);
 });
 EOF
