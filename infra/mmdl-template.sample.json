@@ -53,6 +53,16 @@
                     "ports": [ "80", "9000", "3000" ]
                 }]
             }
+        },
+
+        "balancer": {
+            "type": "LOAD_BALANCING",
+            "lbModule": {
+                "ipAddress": "get me with: gcloud compute addresses reserve --region europe-west1 mmdl",
+                "targetModules": ["nodejs"],
+                "portRange": "80-44380",
+                "ipProtocol": "tcp"
+            }
         }
     },
 

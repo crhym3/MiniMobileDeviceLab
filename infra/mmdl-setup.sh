@@ -10,21 +10,20 @@ cat <<EOF > /apps/bin/update.sh
 #!/bin/bash
 
 REPO_URL=https://github.com/crhym3/MiniMobileDeviceLab.git
-DIR=/apps/mmdl
+APP_DIR=/apps/mmdl
 DB_URL=$(curl -f -s -H 'Metadata-Flavor: Google' http://metadata/computeMetadata/v1/instance/attributes/MMDL_DB_URL)
 DB_NAME=$(curl -f -s -H 'Metadata-Flavor: Google' http://metadata/computeMetadata/v1/instance/attributes/MMDL_DB_NAME)
 
-if [ ! -d /apps/mmdl ]; then
-    git clone $REPO_URL $DIR
+if [ ! -d \$APP_DIR ]; then
+    git clone \$REPO_URL \$APP_DIR
 fi
 
-cd $DIR
+cd \$APP_DIR
 git reset --hard && git pull
 
-cd node
-npm install
-forever stop --plain $DIR/node/app.js
-MMDL_DB_URL=$META_DB_URL MMDL_DB_NAME=$META_DB_URL forever start --plain $DIR/node/app.js
+cd node && npm install
+forever stop --plain \$APP_DIR/node/app.js
+MMDL_DB_URL=\$DB_URL MMDL_DB_NAME=\$DB_URL forever start --plain \$APP_DIR/node/app.js
 EOF
 
 chmod +x /apps/bin/update.sh
@@ -67,17 +66,17 @@ server {
     server_name localhost;
 
     location / {
-        try_files $uri $uri/ /index.html;
+        try_files \$uri \$uri/ /index.html;
     }
 
     location /github {
         gzip off;
         fastcgi_pass unix:/var/run/fcgiwrap.socket;
-        fastcgi_param SCRIPT_FILENAME $document_root/bin/github-push-to-deploy.js;
+        fastcgi_param SCRIPT_FILENAME \$document_root/bin/github-push-to-deploy.js;
         include fastcgi_params;
     }
 }
 EOF
 
-service nginx reload
+service nginx restart
 sudo -u apps /apps/bin/update.sh
