@@ -21,12 +21,7 @@ exports.openDb = function(successCb, errorCb) {
         return;
     }
 
-    connection = mysql.createConnection({
-        host     : config.dbHost,
-        user     : config.dbUsername,
-        password : config.dbPassword,
-        port: config.dbPort
-    });
+    connection = mysql.createConnection(config.dbURL);
 
     connection.connect();
 
