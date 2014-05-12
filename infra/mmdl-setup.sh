@@ -24,6 +24,9 @@ git reset --hard && git pull
 cd node && npm install
 forever stop --plain \$APP_DIR/node/app.js
 MMDL_DB_URL=\$DB_URL MMDL_DB_NAME=\$DB_URL forever start --plain \$APP_DIR/node/app.js
+
+cd \$APP_DIR/web-front-end && npm install
+grunt build --no-color
 EOF
 
 chmod +x /apps/bin/update.sh
@@ -66,6 +69,7 @@ server {
     server_name localhost;
 
     location / {
+        root /apps/mmdl/web-front-end/dist;
         try_files \$uri \$uri/ /index.html;
     }
 
